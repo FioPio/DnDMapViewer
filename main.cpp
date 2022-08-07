@@ -3,6 +3,7 @@
 #include <iostream>
 
 void CallBackFunc(int event, int x, int y, int flags, void* userdata);
+cv::Mat scaleImage(cv::Mat image, float scale);
 
 int main(int argc, char** argv )
 {
@@ -23,17 +24,12 @@ int main(int argc, char** argv )
        //set the callback function for any mouse event
      cv::setMouseCallback("Display Image", CallBackFunc, NULL);
 
-
-
-    imshow("Display Image", master_view);
+    imshow("Display Image", scaleImage(master_view,0.25));
     cv::waitKey(0);
 
     cv::Mat players_view;
 
     master_view.copyTo(players_view);
-
-
-
 
     return 0;
 }
@@ -59,4 +55,15 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
           std::cout << "Mouse move over the window - position (" << x << ", " << y << ")" << std::endl;
 
      }
+}
+
+cv::Mat scaleImage(cv::Mat image, float scale)
+{
+    std::cout << "Original Height and Width: " << image.rows << " x " << image.cols << std::endl;
+    cv::Mat scaled_image;
+    int new_width  =  scale * image.cols;
+    int new_height =  scale * image.rows;
+    std::cout << "Scaled Height and Width: " << new_height << " x " << new_width << std::endl;
+    cv::resize(image, scaled_image, cv::Size(new_width, new_height), cv::INTER_LINEAR);
+    return scaled_image;
 }
