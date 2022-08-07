@@ -6,6 +6,9 @@
 void CallBackFunc(int event, int x, int y, int flags, void* userdata);
 cv::Mat scaleImage(cv::Mat image, float scale);
 
+cv::Mat master_view;
+cv::Mat players_view;
+
 
 int main(int argc, char** argv )
 {
@@ -15,7 +18,6 @@ int main(int argc, char** argv )
         return -1;
     }
 
-    cv::Mat master_view;
     master_view = cv::imread( argv[1], 1 );
 
     if ( !master_view.data )
@@ -28,10 +30,10 @@ int main(int argc, char** argv )
     //set the callback function for any mouse event
     cv::setMouseCallback("Display Image", CallBackFunc, NULL);
 
-    imshow("Display Image", scaleImage(master_view,0.1));
+    master_view = scaleImage(master_view,0.1);
+    cv::imshow("Display Image", master_view);
     cv::waitKey(0);
 
-    cv::Mat players_view;
 
     master_view.copyTo(players_view);
 
@@ -45,6 +47,18 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
      if  ( event == cv::EVENT_LBUTTONDOWN )
      {
           std::cout << "Left button of the mouse is clicked - position (" << x << ", " << y << ")" << std::endl;
+          master_view.copyTo(players_view);
+
+          cv::Point center(x, y);//Declaring the center point
+          int radius = 50; //Declaring the radius
+          cv::Scalar circle_color(255, 255, 255);//Color of the circle
+          int thickness = -radius;//2;//thickens of the line
+          cv::namedWindow("Player's view");//Declaring a window to show the circle
+          cv::circle(players_view, center,radius, circle_color, thickness);//Using circle()function to draw the line//
+          cv::imshow("Player's view", players_view);//Showing the circle//
+          cv::waitKey(0);//Waiting for Keystroke//
+
+
      }
      else if  ( event == cv::EVENT_RBUTTONDOWN )
      {
@@ -59,6 +73,7 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
           std::cout << "Mouse move over the window - position (" << x << ", " << y << ")" << std::endl;
      }
 }
+
 
 cv::Mat scaleImage(cv::Mat image, float scale)
 {
