@@ -2,18 +2,22 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
+
 void CallBackFunc(int event, int x, int y, int flags, void* userdata);
 cv::Mat scaleImage(cv::Mat image, float scale);
+
 
 int main(int argc, char** argv )
 {
     if ( argc != 2 )
     {
-        printf("usage: DisplayImage.out <Image_Path>\n");
+        printf("Usage: %s <Image_Path>\n",argv[0]);
         return -1;
     }
+
     cv::Mat master_view;
     master_view = cv::imread( argv[1], 1 );
+
     if ( !master_view.data )
     {
         printf("No master_view data \n");
@@ -21,10 +25,10 @@ int main(int argc, char** argv )
     }
     namedWindow("Display Image", cv::WINDOW_AUTOSIZE );
 
-       //set the callback function for any mouse event
-     cv::setMouseCallback("Display Image", CallBackFunc, NULL);
+    //set the callback function for any mouse event
+    cv::setMouseCallback("Display Image", CallBackFunc, NULL);
 
-    imshow("Display Image", scaleImage(master_view,0.25));
+    imshow("Display Image", scaleImage(master_view,0.1));
     cv::waitKey(0);
 
     cv::Mat players_view;
@@ -53,7 +57,6 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
      else if ( event == cv::EVENT_MOUSEMOVE )
      {
           std::cout << "Mouse move over the window - position (" << x << ", " << y << ")" << std::endl;
-
      }
 }
 
