@@ -47,17 +47,23 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
      if  ( event == cv::EVENT_LBUTTONDOWN )
      {
           std::cout << "Left button of the mouse is clicked - position (" << x << ", " << y << ")" << std::endl;
-          master_view.copyTo(players_view);
+          //master_view.copyTo(players_view);
 
           cv::Point center(x, y);//Declaring the center point
           int radius = 50; //Declaring the radius
           cv::Scalar circle_color(255, 255, 255);//Color of the circle
           int thickness = -radius;//2;//thickens of the line
           cv::namedWindow("Player's view");//Declaring a window to show the circle
-          cv::circle(players_view, center,radius, circle_color, thickness);//Using circle()function to draw the line//
+          cv::Mat image_mask(master_view.rows, master_view.cols, CV_8UC3, cv::Scalar(0, 0, 0));
+          players_view=cv::Mat(master_view.rows, master_view.cols, CV_8UC3, cv::Scalar(0, 0, 0));
+          
+          
+          cv::circle(image_mask, center,radius, circle_color, thickness);//Using circle()function to draw the line//
+          
+          master_view.copyTo(players_view,image_mask);
           cv::imshow("Player's view", players_view);//Showing the circle//
           cv::waitKey(0);//Waiting for Keystroke//
-
+          cv::destroyWindow("Player's view");
 
      }
      else if  ( event == cv::EVENT_RBUTTONDOWN )
