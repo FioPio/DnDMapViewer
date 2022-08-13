@@ -13,3 +13,9 @@ cv::Mat Image::scaleImage(cv::Mat image, float scale)
     cv::resize(image, scaled_image, cv::Size(new_width, new_height), cv::INTER_LINEAR);
     return scaled_image;
 }
+
+
+cv::Mat Image::generateColoredImage(int image_rows, int image_columns, cv::Scalar image_color);
+{
+    return cv::Mat(image_rows, image_columns, CV_8UC3, image_color);
+}
